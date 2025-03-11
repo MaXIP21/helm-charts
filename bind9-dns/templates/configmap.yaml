@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.dnsConfigmap.name }}
+  namespace: {{ .Values.namespace }}
+data:
+  k8s_hosts_config.yaml: {{ .Values.dnsConfigmap.data.dnsConfiguration }}
+  k8s_reverse_config.yaml: {{ .Values.dnsConfigmap.data.reverseDnsConfiguration }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bind9-cm
+data:
+  WEBMIN_ENABLED: {{ .Values.webmin.data.enabled }}
+  WEBMIN_INIT_SSL_ENABLED: {{ .Values.webmin.data.sslEnabled }}
+  WEBMIN_INIT_REDIRECT_ENABLED: {{ .Values.webmin.data.redirectEnabled }}
+  WEBMIN_INIT_REFERERS: {{ .Values.webmin.data.referers }}
+  WEBMIN_INIT_REDIRECT_PORT: {{ .Values.webmin.data.redirectPort }}
+  UPDATE_DNS_CONF: {{ .Values.webmin.data.updateDnsConfig }}

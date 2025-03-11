@@ -1,0 +1,312 @@
+# Default values for bind9-dns.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+replicaCount: 1
+
+namespace: bind9-test
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: peterb83/schrack-dns
+  # This sets the pull policy for images.
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.2.1"
+
+# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# This is for setting Kubernetes Annotations to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations:
+  hostnames-map: ns1
+# This is for setting Kubernetes Labels to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels:
+
+dnsConfigmap:
+  name: dns-config-files
+  data:
+    dnsConfiguration: |
+      global:
+      CONTACT_EMAIL: informatika.schrack-seconet.hu
+      hosts:
+        1:
+          domain_name: k8s.schrack-seconet.hu
+          pod_domain_name: ns1.k8s.schrack-seconet.local
+          timestamp: 2024022904
+          records:
+            1:
+              key: "*.k8s.schrack-seconet.hu"
+              type: "CNAME"
+              value: "weblb01.schrack-seconet.local"
+        2:
+          domain_name: k8s.schrack-seconet.local
+          pod_domain_name: ns1.k8s.schrack-seconet.local
+          timestamp: 2024042901
+          records:
+            1:
+              key: "argocd-bud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            2:
+              key: "prometheus-bud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            3:
+              key: "karma.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            4:
+              key: "alertmanager.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            5:
+              key: "gitlab.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            6:
+              key: "minio-bud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            7:
+              key: "minio-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            8:
+              key: "argocd-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            9:
+              key: "ns1.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            10:
+              key: "ns2.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            11:
+              key: "nextcloud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            12:
+              key: "nextcloud-test.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            13:
+              key: "fileshare-test.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            14:
+              key: "prometheus-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            15:
+              key: "gitlab-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            16:
+              key: "gitlab-bud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            17:
+              key: "registry.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            18:
+              key: "kas.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            19:
+              key: "*.pages.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            20:
+              key: "turn.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.218"
+            21:
+              key: "vault.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            22:
+              key: "vault-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            23:
+              key: "blackbox.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            24:
+              key: "snmp-exporter.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            25:
+              key: "gyo01.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            26:
+              key: "bud01.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            27:
+              key: "grafana.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            28:
+              key: "grafana-bud.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            29:
+              key: "grafana-gyo.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            30:
+              key: "jenkins.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            31:
+              key: "minio-bud-test.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.200"
+            32:
+              key: "minio-gyo-test.k8s.schrack-seconet.local"
+              type: "A"
+              value: "172.17.95.200"
+            33:
+              key: "einvoice.k8s.schrack-seconet.local"
+              type: "A"
+              value: "192.168.95.104"
+    reverseDnsConfiguration: |
+      global:
+        CONTACT_EMAIL: informatika.schrack-seconet.hu
+        DOMAIN_NAME: k8s.schrack-seconet.local
+      reverse:
+        1:
+          file_name: 192.168.95
+          reverse_32: 200.95.168.192
+          reverse_24: 95.168.192
+          pod_domain_name: ns1.k8s.schrack-seconet.local
+          ptr: 200.95.168.192
+          timestamp: 2024030403
+        2:
+          file_name: 172.17.95
+          reverse_32: 200.95.17.172
+          reverse_24: 95.17.172
+          pod_domain_name: ns2.k8s.schrack-seconet.local
+          timestamp: 2024022900
+
+webmin:
+  enabled: true
+  sslEnabled: false
+  redirectEnabled: true
+  referers: "dnsadmin.k8s.schrack-seconet.local"
+  redirectPort: 443
+  updateDnsConfig: true
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  type: ClusterIP
+  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 8080
+
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: 
+- name: bind9-pvc
+  persistentVolumeClaim:
+    claimName: bind9-pvc-main
+- name: config-files
+  configMap:
+    name: dns-config-files
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: 
+- name: bind9-pvc
+  mountPath: "/data"
+- name: config-files
+  mountPath: /schrack/config
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

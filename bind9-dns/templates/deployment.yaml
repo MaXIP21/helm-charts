@@ -1,0 +1,109 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ include "bind9-dns.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  {{ include "bind9-dns.fullname" . }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "bind9-dns.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        app:  {{ include "bind9-dns.fullname" . }}
+        app.kubernetes.io/name:  {{ include "bind9-dns.fullname" . }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "bind9-dns.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP
+        - containerPort: 53
+          protocol: UDP
+          name: dns-udp
+        - containerPort: 53
+          protocol: TCP
+          name: dns-tcp
+        env: 
+          - name: UPDATE_DNS_CONF
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: UPDATE_DNS_CONF
+          - name: WEBMIN_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: WEBMIN_ENABLED
+          - name: WEBMIN_INIT_SSL_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: WEBMIN_INIT_SSL_ENABLED
+          - name: WEBMIN_INIT_REDIRECT_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: WEBMIN_INIT_REDIRECT_PORT
+          - name: WEBMIN_INIT_REDIRECT_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: WEBMIN_INIT_REDIRECT_ENABLED
+          - name: WEBMIN_INIT_REFERERS
+            valueFrom:
+              configMapKeyRef:
+                name: bind9-cm
+                key: WEBMIN_INIT_REFERERS
+          - name: ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dns-secret
+                key: ROOT_PASSWORD
+        {{- with .Values.volumeMounts }}
+        volumeMounts:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: bind9-pvc
+          persistentVolumeClaim:
+            claimName: bind9-pvc-main
+        - name: config-files
+          configMap:
+            name: dns-config-files
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: docker-peterb83
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1

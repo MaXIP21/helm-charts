@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bind9-ingress-web
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-body-size: 8G
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: dnsadmin.k8s.schrack-seconet.local
+    http: 
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: bind9-web-service
+            port:
+              name: bind9-webmin
+  tls:
+  - hosts:
+    - dnsadmin.k8s.schrack-seconet.local
+    secretName: bind9-tls-internal
