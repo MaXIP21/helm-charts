@@ -1,0 +1,27 @@
+{{- if and .Values.persistence.enabled .Values.persistence.bind9Data.enabled (not .Values.persistence.bind9Data.existingClaim) }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "bind9-dns.fullname" . }}-data
+  labels:
+    {{- include "bind9-dns.labels"  ( dict "component" "app"  "rootContext" $ ) | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+  {{- with .Values.persistence.bind9Data.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.bind9Data.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.bind9Data.size | quote }}
+  {{- with .Values.persistence.bind9Data.storageClass }}
+  {{- if (eq "-" .) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ . }}"
+  {{- end }}
+  {{- end }}
+{{- end }}
