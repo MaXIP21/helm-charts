@@ -16,6 +16,9 @@ spec:
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      annotations:
+        checksum/dns-config: {{ toYaml .Values.dnsConfigmap.data | sha256sum }}
+        checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
       labels:
         {{- include "bind9-dns.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
