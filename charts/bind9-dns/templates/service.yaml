@@ -26,6 +26,5 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP | quote }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}-deployment
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: app  
+    {{- include "bind9-dns.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
