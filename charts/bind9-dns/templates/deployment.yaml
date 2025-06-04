@@ -27,7 +27,6 @@ spec:
         app.kubernetes.io/name:  {{ include "bind9-dns.fullname" . }}-deployment
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/component: web
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -35,6 +34,8 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "bind9-dns.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
+      selector:
+        matchLabels: {{- include "bind9-dns.selectorLabels" . | nindent 6 }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
