@@ -12,6 +12,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.bind9.configMapName }}
+  namespace: {{ .Values.namespace }}
 data:
   WEBMIN_ENABLED: '{{ .Values.webmin.enabled }}'
   WEBMIN_INIT_SSL_ENABLED: '{{ .Values.webmin.sslEnabled }}'
