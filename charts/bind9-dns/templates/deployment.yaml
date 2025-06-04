@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  {{ include "bind9-dns.fullname" . }}-deployment
+  name:  {{ include "bind9-dns.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}-deployment
+      app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template: 
     metadata:
@@ -21,7 +21,7 @@ spec:
         checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
       labels:
         {{- include "bind9-dns.labels" . | nindent 8 }}
-        app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}-deployment
+        app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- with .Values.podLabels }}
