@@ -8,7 +8,9 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "bind9-dns.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name:  {{ include "bind9-dns.fullname" . }}-deployment
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: app
   template:
     metadata:
       {{- with .Values.podAnnotations }}
