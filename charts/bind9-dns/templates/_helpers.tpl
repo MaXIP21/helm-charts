@@ -48,6 +48,9 @@ Selector labels
 {{- define "bind9-dns.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "bind9-dns.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .component }}
+app.kubernetes.io/component: {{ .component }}
+{{- end }}
 {{- end }}
 
 {{/*
