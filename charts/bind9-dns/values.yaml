@@ -98,7 +98,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-  persistence:
+persistence:
   # bind9 Data (/var/www/html)
   enabled: false
   annotations: {}
