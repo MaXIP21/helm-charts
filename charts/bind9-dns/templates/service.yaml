@@ -25,3 +25,4 @@ spec:
   {{- end }}
   selector:
     {{- include "bind9-dns.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
