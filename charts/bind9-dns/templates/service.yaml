@@ -4,7 +4,7 @@ metadata:
   name: {{ include "bind9-dns.fullname" . }}-service
   namespace: {{ .Values.namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}-service
+    {{- include "bind9-dns.labels" . | nindent 4 }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
@@ -26,5 +26,5 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP | quote }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}-deployment
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "bind9-dns.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web  
