@@ -6,16 +6,23 @@ on:
       - main
 
 jobs:
-  helm-check:
+
+  helm-lint:
+    needs: helm-check
     runs-on: ubuntu-latest
     steps:
-    - name: helm-check
-      uses: actions/checkout@v4
-      env:
-        CHART_LOCATION: ./charts/bind9-dns
-        CHART_VALUES: ./charts/bind9-dns/values.yaml
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Run Helm Lint
+        run: |
+          helm lint ./charts/bind9-dns
+
   release:
-    needs: helm-check
+    needs: helm-lint
     # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
     # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
     permissions:
