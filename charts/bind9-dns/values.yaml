@@ -52,7 +52,6 @@ dnsSecret:
 
 bind9:
   datadir: /data
-  configMapName: bind9-cm
 
 webmin:
   enabled: "true"
