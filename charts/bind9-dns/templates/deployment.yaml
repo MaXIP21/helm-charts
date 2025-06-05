@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name:  {{ include "bind9-dns.fullname" . }}
   namespace: {{ template "bind9-dns.namespace" . }}
+  labels:
+    {{- include "bind9-dns.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
