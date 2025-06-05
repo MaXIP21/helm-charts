@@ -8,8 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}
+      {{- include "bind9-dns.labels" . | nindent 8 }}
+      app.kubernetes.io/name: {{ include "bind9-dns.selectorLabels" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/managed-by: {{ .Release.Service }}
+      app.kubernetes.io/component: web
   template: 
     metadata:
       {{- with .Values.podAnnotations }}
@@ -59,6 +62,8 @@ spec:
           protocol: TCP
           name: dns-tcp
         env: 
+          - name: BIND9_SERVER_NAME
+            value: {{ template "bind9-dns.fullname" . }}
           - name: UPDATE_DNS_CONF
             valueFrom:
               configMapKeyRef:
