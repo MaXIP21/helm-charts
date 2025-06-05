@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.dnsConfigmap.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ template "bind9-dns.namespace" . }}
 data:
   k8s_hosts_config.yaml: {{ toYaml .Values.dnsConfigmap.data.dnsConfiguration | indent 2 }}
   k8s_reverse_config.yaml: {{ toYaml .Values.dnsConfigmap.data.reverseDnsConfiguration | indent 2 }}
@@ -12,7 +12,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.bind9.configMapName }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ template "bind9-dns.namespace" . }}
 data:
   WEBMIN_ENABLED: '{{ .Values.webmin.enabled }}'
   WEBMIN_INIT_SSL_ENABLED: '{{ .Values.webmin.sslEnabled }}'

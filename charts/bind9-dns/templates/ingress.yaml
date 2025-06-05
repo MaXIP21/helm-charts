@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "bind9-dns.fullname" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ template "bind9-dns.namespace" . }}
   labels:
     {{- include "bind9-dns.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}

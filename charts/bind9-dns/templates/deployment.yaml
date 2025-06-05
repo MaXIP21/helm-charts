@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  {{ include "bind9-dns.fullname" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ template "bind9-dns.namespace" . }}
 spec:
   replicas: 1
   selector:
@@ -11,16 +11,14 @@ spec:
       {{- include "bind9-dns.selectorLabels" . | nindent 6 }}
   template: 
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      annotations:
         checksum/dns-config: {{ toYaml .Values.dnsConfigmap.data | sha256sum }}
         checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
       labels:
         {{- include "bind9-dns.labels" . | nindent 8 }}
-        app.kubernetes.io/component: web
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

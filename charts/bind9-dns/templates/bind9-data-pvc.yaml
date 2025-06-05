@@ -4,6 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "bind9-dns.fullname" . }}-data
+  namespace: {{ template "bind9-dns.namespace" . }}
   labels:
     {{- include "bind9-dns.labels"  ( dict "component" "app"  "rootContext" $ ) | nindent 4 }}
   annotations:
