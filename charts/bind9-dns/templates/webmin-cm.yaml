@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: webmin-cm
+  name: {{ .Values.bind9.configMapName }}
   namespace: {{ template "bind9-dns.namespace" . }}
 data:
   WEBMIN_ENABLED: '{{ .Values.webmin.enabled }}'
