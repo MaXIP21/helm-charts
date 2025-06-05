@@ -43,6 +43,7 @@ podLabels: {}
 
 dnsConfigmap:
   name: dns-config-files
+  configMapName: dns-config-files
   data:
     dnsConfiguration: ""
     reverseDnsConfiguration: ""
