@@ -20,7 +20,6 @@ spec:
         checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
       labels:
         {{- include "bind9-dns.labels" . | nindent 4 }}
-        app.kubernetes.io/component: web
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
