@@ -8,7 +8,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "bind9-dns.selectorLabels" . }}
+      {{- include "bind9-dns.selectorLabels" . | nindent 4 }}
   template: 
     metadata:
       {{- with .Values.podAnnotations }}
