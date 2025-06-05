@@ -59,32 +59,32 @@ spec:
           - name: UPDATE_DNS_CONF
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: UPDATE_DNS_CONF
           - name: WEBMIN_ENABLED
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: WEBMIN_ENABLED
           - name: WEBMIN_INIT_SSL_ENABLED
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: WEBMIN_INIT_SSL_ENABLED
           - name: WEBMIN_INIT_REDIRECT_PORT
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: WEBMIN_INIT_REDIRECT_PORT
           - name: WEBMIN_INIT_REDIRECT_ENABLED
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: WEBMIN_INIT_REDIRECT_ENABLED
           - name: WEBMIN_INIT_REFERERS
             valueFrom:
               configMapKeyRef:
-                name: webmin-cm
+                name: {{ .Values.bind9.configMapName }}
                 key: WEBMIN_INIT_REFERERS
           - name: ROOT_PASSWORD
             valueFrom:
