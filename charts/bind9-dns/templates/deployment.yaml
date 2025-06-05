@@ -8,8 +8,8 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      app.kubernetes.io/name: {{ include "bind9-dns.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
       app.kubernetes.io/component: web
   template: 
     metadata:
@@ -21,9 +21,8 @@ spec:
         checksum/dns-config: {{ toYaml .Values.dnsConfigmap.data | sha256sum }}
         checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
       labels:
-        {{- include "bind9-dns.labels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ include "bind9-dns.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/component: web
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -35,9 +34,6 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "bind9-dns.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
-      selector:
-        matchLabels:
-          {{- include "bind9-dns.selectorLabels" . | nindent 12 }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
