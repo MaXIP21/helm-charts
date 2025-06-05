@@ -17,8 +17,8 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        checksum/dns-config: {{ toYaml .Values.dnsConfigmap.data | sha256sum }}
-        checksum/bind9-config: {{ toYaml .Values.webmin | sha256sum }}
+        checksum/dns-config: {{ include (print $.Template.BasePath "/dns-cm.yaml") . | sha256sum }}
+        checksum/webmin-config: {{ include (print $.Template.BasePath "/webmin-cm.yaml") . | sha256sum }}
       labels:
         {{- include "bind9-dns.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
