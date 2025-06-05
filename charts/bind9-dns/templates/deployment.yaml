@@ -10,7 +10,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "bind9-dns.fullname" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: web
   template: 
     metadata:
       {{- with .Values.podAnnotations }}
@@ -24,6 +23,7 @@ spec:
         {{- include "bind9-dns.labels" . | nindent 8 }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/component: web
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
