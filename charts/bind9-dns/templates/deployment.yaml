@@ -101,6 +101,9 @@ spec:
             mountPath: {{ .Values.bind9.datadir }}
             subPath: {{ ternary "data" (printf "%s/data" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
           {{- end }}
+          - name: config
+            mountPath: {{ .Values.dnsConfigmap.configDir }}
+            readOnly: true
       volumes:
         - name: bind9-main
           {{- if .Values.persistence.enabled }}
@@ -114,6 +117,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.bind9Data.existingClaim }}{{ .Values.persistence.bind9Data.existingClaim }}{{- else }}{{ template "bind9-dns.fullname" . }}-data-pvc{{- end }}
         {{- end }}
+        - name: config
+          configMap:
+            name: {{ .Values.dnsConfigmap.name }}
       restartPolicy: Always
       imagePullSecrets:
       - name: docker-peterb83

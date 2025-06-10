@@ -43,6 +43,7 @@ podLabels: {}
 
 dnsConfigmap:
   name: dns-config-files
+  configDir: /schrack/config
   data:
     dnsConfiguration: ""
     reverseDnsConfiguration: ""
