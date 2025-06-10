@@ -102,7 +102,7 @@ spec:
             subPath: {{ ternary "data" (printf "%s/data" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
           {{- end }}
           - name: config-files
-            mountPath: {{ .Values.dnsConfigmap.configDir }}
+            mountPath: /schrack/config
             readOnly: true
       volumes:
         - name: bind9-main
@@ -117,11 +117,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.bind9Data.existingClaim }}{{ .Values.persistence.bind9Data.existingClaim }}{{- else }}{{ template "bind9-dns.fullname" . }}-data-pvc{{- end }}
         {{- end }}
-        {{- if .Values.dnsConfigmap.name }}
         - name: config-files
           configMap:
             name: {{ .Values.dnsConfigmap.name }}
-        {{- end }}
       restartPolicy: Always
       imagePullSecrets:
       - name: docker-peterb83
