@@ -106,7 +106,7 @@ spec:
       volumes:
         - name: config-files
           configMap:
-            name: dns-config-files
+            name: {{ .Values.dnsConfigmap.name }}
         - name: bind9-main
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
