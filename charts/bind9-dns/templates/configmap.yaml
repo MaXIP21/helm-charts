@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.dnsConfigmap.name }}
   namespace: {{ template "bind9-dns.namespace" . }}
+  labels:
+    {{- include "bind9-dns.labels" . | nindent 4 }}
 data:
   k8s_hosts_config.yaml: {{ toYaml .Values.dnsConfigmap.data.dnsConfiguration | indent 2 }}
   k8s_reverse_config.yaml: {{ toYaml .Values.dnsConfigmap.data.reverseDnsConfiguration | indent 2 }}

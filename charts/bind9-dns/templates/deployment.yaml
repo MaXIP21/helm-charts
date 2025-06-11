@@ -92,8 +92,9 @@ spec:
                 name: {{ .Values.dnsSecret.name }}
                 key: ROOT_PASSWORD
         volumeMounts:
-          - mountPath: /schrack/config
-            name: config-files
+          - name: config-files
+            mountPath: /schrack/config
+            readOnly: true
           {{- if and .Values.persistence.bind9Data.enabled .Values.persistence.enabled }}
           - name: bind9-data
             mountPath: {{ .Values.bind9.datadir }}
