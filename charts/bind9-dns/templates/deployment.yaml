@@ -93,8 +93,8 @@ spec:
                 key: ROOT_PASSWORD
         volumeMounts:
           {{- if .Values.dnsConfigmap.name }}
-            - name: config
-              mountPath: /schrack/config
+          - name: config
+            mountPath: /schrack/config
           {{- end }}
           {{- if and .Values.persistence.bind9Data.enabled .Values.persistence.enabled }}
           - name: bind9-data
