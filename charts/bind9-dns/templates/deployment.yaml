@@ -92,9 +92,8 @@ spec:
                 name: {{ .Values.dnsSecret.name }}
                 key: ROOT_PASSWORD
         volumeMounts:
-          - name: configFiles
-            mountPath: /schrack/config
-            readOnly: true
+          - mountPath: /schrack/config
+            name: config-files
           {{- if and .Values.persistence.bind9Data.enabled .Values.persistence.enabled }}
           - name: bind9-data
             mountPath: {{ .Values.bind9.datadir }}
@@ -104,9 +103,8 @@ spec:
             mountPath: {{ .Values.bind9.datadir }}
             subPath: {{ ternary "data" (printf "%s/data" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
           {{- end }}
-
       volumes:
-        - name: configFiles
+        - name: config-files
           configMap:
             name: dns-config-files
         - name: bind9-main
@@ -121,7 +119,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.bind9Data.existingClaim }}{{ .Values.persistence.bind9Data.existingClaim }}{{- else }}{{ template "bind9-dns.fullname" . }}-data-pvc{{- end }}
         {{- end }}
-        
       restartPolicy: Always
       imagePullSecrets:
       - name: docker-peterb83
