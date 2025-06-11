@@ -92,9 +92,10 @@ spec:
                 name: {{ .Values.dnsSecret.name }}
                 key: ROOT_PASSWORD
         volumeMounts:
-          - name: config-files
-            mountPath: /schrack/config  
-            readOnly: true
+          {{- if .Values.dnsConfigmap.name }}
+            - name: config
+              mountPath: /schrack/config
+          {{- end }}
           {{- if and .Values.persistence.bind9Data.enabled .Values.persistence.enabled }}
           - name: bind9-data
             mountPath: {{ .Values.bind9.datadir }}
@@ -105,9 +106,11 @@ spec:
             subPath: {{ ternary "data" (printf "%s/data" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
           {{- end }}
       volumes:
-        - name: config-files
+        {{- if .Values.dnsConfigmap.name }}
+        - name: config
           configMap:
-            name: {{ .Values.dnsConfigmap.name }}
+            name: {{ .Values.dnsConfigmap.name | default "dns-config-files" }}
+        {{- end }}
         - name: bind9-main
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
