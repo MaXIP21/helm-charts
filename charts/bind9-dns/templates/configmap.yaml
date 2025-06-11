@@ -5,5 +5,5 @@ metadata:
   name: {{ .Values.dnsConfigmap.name }}
   namespace: {{ template "bind9-dns.namespace" . }}
 data:
-  k8s_hosts_config.yaml: {{ toYaml .Values.dnsConfigmap.data.dnsConfiguration | trim | indent 2 }}
-  k8s_reverse_config.yaml: {{ toYaml .Values.dnsConfigmap.data.reverseDnsConfiguration | trim | indent 2 }}
+  k8s_hosts_config.yaml: '{{ toYaml .Values.dnsConfigmap.data.dnsConfiguration | indent 2 }}'
+  k8s_reverse_config.yaml: '{{ toYaml .Values.dnsConfigmap.data.reverseDnsConfiguration | indent 2 }}'

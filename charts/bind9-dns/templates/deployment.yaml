@@ -93,7 +93,7 @@ spec:
                 key: ROOT_PASSWORD
         volumeMounts:
           - name: config-files
-            mountPath: /schrack/config
+            mountPath: /schrack/config  
             readOnly: true
           {{- if and .Values.persistence.bind9Data.enabled .Values.persistence.enabled }}
           - name: bind9-data
