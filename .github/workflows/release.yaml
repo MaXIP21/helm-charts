@@ -20,7 +20,9 @@ jobs:
 
       - name: Run Helm Lint
         run: |
-          helm lint ./charts/bind9-dns
+          for chart in ./charts/*/; do
+            helm lint "$chart"
+          done
 
   release:
     needs: helm-lint
